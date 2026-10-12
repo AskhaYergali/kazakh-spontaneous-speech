@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this material, please cite both the repository and the paper."
+title: "Kazakh Spontaneous Speech: Spontaneity Filter, Manifest and Annotations"
+version: "1.0.0"
+date-released: "2026-10-12"
+license: MIT
+license-url: "https://github.com/AskhaYergali/kazakh-spontaneous-speech/blob/main/LICENSE"
+repository-code: "https://github.com/AskhaYergali/kazakh-spontaneous-speech"
+authors:
+  - family-names: "Yergaliyev"
+    given-names: "Askhat"
+keywords:
+  - Kazakh
+  - spontaneous speech
+  - speech recognition
+  - Whisper
+  - LoRA
+  - code-switching

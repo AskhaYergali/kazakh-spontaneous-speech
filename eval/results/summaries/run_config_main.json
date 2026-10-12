@@ -1,0 +1,55 @@
+{
+  "args": {
+    "base": "abilmansplus/whisper-turbo-ksc2",
+    "train": "golden/spont_train.csv",
+    "tune": "golden/spont_tune.csv",
+    "out": "runs/main_r16",
+    "rank": 16,
+    "decoder_only": false,
+    "lr": 0.0001,
+    "epochs": 3,
+    "select": false,
+    "batch": 8,
+    "accum": 4,
+    "patience": 2,
+    "seed": 42,
+    "limit": 0
+  },
+  "selected": false,
+  "best_checkpoint": null,
+  "tune_history_diagnostic_only": [
+    {
+      "eval_loss": 0.08868841081857681,
+      "eval_wer_canon": 7.178975856420483,
+      "eval_wer_keep": 10.376753792464925,
+      "eval_wer_strip": 6.682258603407952,
+      "eval_runtime": 140.3195,
+      "eval_samples_per_second": 5.773,
+      "eval_steps_per_second": 0.727,
+      "epoch": 0.9988801791713325,
+      "step": 223
+    },
+    {
+      "eval_loss": 0.08722689002752304,
+      "eval_wer_canon": 6.951071860978562,
+      "eval_wer_keep": 10.184459796310804,
+      "eval_wer_strip": 6.431673905780154,
+      "eval_runtime": 140.6374,
+      "eval_samples_per_second": 5.759,
+      "eval_steps_per_second": 0.725,
+      "epoch": 1.9977603583426653,
+      "step": 446
+    },
+    {
+      "eval_loss": 0.08721761405467987,
+      "eval_wer_canon": 6.936827861263442,
+      "eval_wer_keep": 10.155971796880564,
+      "eval_wer_strip": 6.431673905780154,
+      "eval_runtime": 141.5957,
+      "eval_samples_per_second": 5.721,
+      "eval_steps_per_second": 0.72,
+      "epoch": 2.996640537513998,
+      "step": 669
+    }
+  ]
+}

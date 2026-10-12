@@ -1,0 +1,14 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+The data files in this repository -- the manifest, the experimental sets, the
+human annotation results, the evaluation result tables, the lexicons and the
+repetition table -- are licensed under CC BY 4.0:
+https://creativecommons.org/licenses/by/4.0/
+
+You are free to share and adapt this material for any purpose, including
+commercially, provided you give appropriate credit (see CITATION.cff).
+
+These files contain no audio and no transcript text from the KSC2 corpus.
+They contain utterance identifiers, counts, scores and our own labels.
+The KSC2 corpus is not redistributed here and remains under its own licence;
+obtain it from ISSAI, Nazarbayev University.

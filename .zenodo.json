@@ -1,0 +1,22 @@
+{
+  "title": "Kazakh Spontaneous Speech: Spontaneity Filter, Manifest and Annotations",
+  "upload_type": "dataset",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "keywords": [
+    "Kazakh",
+    "spontaneous speech",
+    "speech recognition",
+    "Whisper",
+    "LoRA",
+    "code-switching",
+    "KSC2"
+  ],
+  "description": "Spontaneity filter, full utterance-level manifest, experimental sets and human annotation results for a study of register-controlled evaluation and parameter-efficient adaptation of Whisper on spontaneous Kazakh-Russian conversational speech. Contains no audio and no transcript text from the underlying KSC2 corpus: only utterance identifiers, feature counts, scores and our own labels.",
+  "creators": [
+    {
+      "name": "Yergaliyev, Askhat"
+    }
+  ],
+  "publication_date": "2026-10-12"
+}

@@ -1,0 +1,6 @@
+system,n,ner_ref_entities,ner_hyp_entities,ner_precision,ner_recall,ner_f1
+abilmansplus__whisper-turbo-ksc2__spont_eval,584,236,219,0.5753,0.5339,0.5538
+openai__whisper-large-v3__spont_eval,584,236,135,0.1704,0.0975,0.124
+runs__main_r16__spont_eval,584,236,228,0.6623,0.6398,0.6509
+runs__random_r16__spont_eval,584,236,238,0.6008,0.6059,0.6034
+runs__source_control__spont_eval,584,236,217,0.6037,0.5551,0.5784
