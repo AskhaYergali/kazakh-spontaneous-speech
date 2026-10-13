@@ -16,9 +16,11 @@ label: `validation_listener_1.csv` and `validation_listener_2.csv`. Listener
 2 worked from a blind package in which the audio was renamed B001-B200, and
 that column is kept as `№`; join on `id` to recover the utterance from
 `validation_key.csv`.
-`ОЦЕНКА` is S (spontaneous), P (prepared or read), or NS, which means the
-listener could not decide from the audio; NS rows carry no confidence and
-are excluded from all agreement and accuracy figures. `УВЕРЕННОСТЬ` is
+`ОЦЕНКА` is S (spontaneous), P (prepared or read) or NS. NS means the
+recording carried no signal either way, usually because it was too short;
+the protocol has a separate code X for audio that could not be made out at
+all, and no item received it. The nine NS rows carry no confidence and are
+excluded from every agreement and accuracy figure. `УВЕРЕННОСТЬ` is
 1 (certain) to 3 (uncertain).
 
 Agreement on the 191 items both listeners resolved to S or P: 77.0 per
@@ -33,10 +35,11 @@ precision 0.824 and recall 0.415 on the sample, and precision 0.983 with
 recall 0.087 once the strata are weighted back to the corpus. The weighted
 pair is the one that describes the corpus; the unweighted pair describes
 the sample only. Precision is uneven across subcorpora: 12/12 on podcasts,
-12/12 on radio, 11/11 on talkshow, 10/11 on tv_news, 9/12 on parliament
-and 2/10 on crowdsourced. The filter is not reliable on crowdsourced
+12/12 on radio, 11/11 on talkshow, 10/12 on parliament, 10/11 on tv_news
+and 1/10 on crowdsourced. The filter is not reliable on crowdsourced
 speech, which is why that subcorpus carries no interpretive weight in the
-study.
+study. The six counts sum to 56 correct out of 68 positives, which is the
+0.824 reported above.
 
 ## Calibration pass (`calibration_*`, ids K001-K120)
 
@@ -57,16 +60,21 @@ decision was reached. `calibration_listener_2.csv` has an empty
 
 ## Test-retest (`spotcheck_*`)
 
-One listener judged 100 utterances for the presence of a filled pause
-(`ОТВЕТ`: Д yes, Н no), then re-judged the first 33 blind.
-Four of 33 decisions changed, kappa 0.639. This bounds how high
-between-listener agreement on this material can be.
+One listener was asked, for each utterance, whether the audio contains a
+hesitation, repetition, filled pause or cut-off word that the reference
+transcript does not record (`ОТВЕТ`: Д yes, Н no). The 100 utterances are
+drawn from the prepared matched control set, not at random from the corpus,
+which is why 84 of the 100 answers are Н: that set is read speech and its
+transcripts omit little. The first 33 were then re-judged blind. Four of 33
+decisions changed, kappa 0.639. That figure bounds how high agreement
+between two different listeners on this material can be.
 
 ## Filler spelling audit (`filler_spelling_audit*`)
 
 Thirty positions where the reference transcript and the model wrote a
 filled pause differently. The listener heard the audio and chose variant A
 or B without knowing which was which; the key records what A was and the
-two spellings. The listener chose the reference spelling 15 times out of
-30, two-sided binomial p = 1.000. Neither spelling matches what people hear
-better than the other.
+two spellings. A third option, "cannot tell them apart", was available and
+was never used: the listener always heard a vowel. The reference spelling
+was chosen 15 times out of 30, two-sided binomial p = 1.000. Neither
+spelling matches what people hear better than the other.

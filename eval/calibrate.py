@@ -11,7 +11,7 @@
   5. Выгружает пограничные примеры для просмотра глазами (это и есть калибровка).
 
 Запуск ИЗ КОРНЯ КОРПУСА:
-    cd /Users/askhatyergaliyev/Downloads/ISSAI_KSC2
+    cd /path/to/ISSAI_KSC2
     python3 code/calibrate.py manifest_v2.csv
 """
 
