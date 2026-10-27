@@ -1,7 +1,6 @@
 # Kazakh Spontaneous Speech: Spontaneity Filter, Manifest and Annotations
 
 [![DOI](https://zenodo.org/badge/1037572614.svg)](https://doi.org/10.5281/zenodo.23357132)
-https://doi.org/10.5281/zenodo.23357132
 
 Supplementary material for the study of register-controlled evaluation and
 parameter-efficient adaptation of Whisper on spontaneous Kazakh-Russian
@@ -67,6 +66,13 @@ applied to it directly.
 The script prints the lexicon SHA-256 it used. If it matches the
 `lexicon_sha256` column of the published manifest, the scores are
 bit-identical.
+
+## Related artifacts
+
+| Artifact | Location |
+| --- | --- |
+| LoRA adapter trained by `eval/train_lora.py` on `manifest/sets/golden_spont_train.csv` (13 MB, MIT) | [askhaYerga/whisper-turbo-ksc2-kk-spontaneous-lora](https://huggingface.co/askhaYerga/whisper-turbo-ksc2-kk-spontaneous-lora) — DOI [10.57967/hf/11281](https://doi.org/10.57967/hf/11281) |
+| Base model it adapts (MIT) | [abilmansplus/whisper-turbo-ksc2](https://huggingface.co/abilmansplus/whisper-turbo-ksc2) |
 
 ## Licence
 
