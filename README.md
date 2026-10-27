@@ -1,6 +1,9 @@
 # Kazakh Spontaneous Speech: Spontaneity Filter, Manifest and Annotations
 
-[![DOI](https://zenodo.org/badge/1037572614.svg)](https://doi.org/10.5281/zenodo.23357132)
+[![DOI 10.5281/zenodo.23357132](https://zenodo.org/badge/1037572614.svg)](https://doi.org/10.5281/zenodo.23357132)
+
+Archived release: <https://doi.org/10.5281/zenodo.23357132> — concept DOI, always
+resolves to the latest version.
 
 Supplementary material for the study of register-controlled evaluation and
 parameter-efficient adaptation of Whisper on spontaneous Kazakh-Russian
