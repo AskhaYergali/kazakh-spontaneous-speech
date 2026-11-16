@@ -1,5 +1,9 @@
 # Kazakh Spontaneous Speech: Spontaneity Filter, Manifest and Annotations
 
+[![DOI 10.5281/zenodo.23357132](https://zenodo.org/badge/1037572614.svg)](https://doi.org/10.5281/zenodo.23357132)
+
+Archived release: <https://doi.org/10.5281/zenodo.23357132> — concept DOI, the latest version.
+
 Supplementary material for the study of register-controlled evaluation and
 parameter-efficient adaptation of Whisper on spontaneous Kazakh-Russian
 conversational speech.
@@ -22,10 +26,10 @@ recomputed. `CHANGELOG.md` lists what moved and by how much.
 | `manifest/sets/` | the experimental sets: Golden Dataset, matched source control, random controls of 500 / 1000 / 2000 utterances, and `nonfiller_spont.csv`, the filler-free spontaneous set of Section 6.5 |
 | `annotation/` | human annotation results: formal validation (three listeners, ground truth by majority), calibration pass, filler-spelling audit, test-retest |
 | `annotation_tools/` | scripts that build the blind annotation packages and score them |
-| `eval/*.py` | evaluation and analysis scripts, including the ones that produce the tables and figures of the paper. Table 6 and Section 5.2 come from `validation_precision.py`, Table 7 from `ablation.py` and, for its last row, `ablation_stoplist.py`, Section 6.3 and Figure 1 from `harmony_fillers.py` and `figure1_harmony.py`, the Supplementary from `score_sets.py`, `supp_figures.py` and `build_supplementary.py` |
+| `eval/*.py` | evaluation and analysis scripts, including the ones that produce the tables and figures of the paper. Table 6 and Section 5.2 come from `validation_precision.py`, Table 7 from `ablation.py` and, for its last row, `ablation_stoplist.py`, Table 9 from `bootstrap_register_gap.py`, Section 6.3 and Figure 1 from `harmony_fillers.py` and `figure1_harmony.py`, the Supplementary from `score_sets.py`, `supp_figures.py` and `build_supplementary.py`. Scripts are named for what they compute, not for a table number |
 | `requirements.txt` | the libraries those scripts need, pinned to the versions the released results were produced with |
 | `eval/results/asr_runs/` | per-utterance recognition results of every run: utterance id, domain, spontaneity score, duration, utterance WER |
-| `eval/results/summaries/` | aggregated WER/CER tables and the downstream NER results, prefixed with the working folder they came from |
+| `eval/results/summaries/` | aggregated WER/CER tables and the downstream NER results, prefixed with the working folder they came from. `wer_counts_register_gap.csv` holds the per-utterance error counts under the three scoring conditions, which is enough to reproduce the register gap and its intervals without the corpus text |
 | `eval/results/PROVENANCE.csv` | every original path in the working tree, the released file it maps to, and its SHA-256 |
 
 Runs were produced over several sessions in overlapping working folders. Files
@@ -94,6 +98,13 @@ training set.
 The script prints the lexicon SHA-256 it used. If it matches the
 `lexicon_sha256` column of the published manifest, the scores are
 bit-identical.
+
+## Related artifacts
+
+| Artifact | Location |
+| --- | --- |
+| LoRA adapter trained by `eval/train_lora.py` on `manifest/sets/golden_spont_train.csv` (13 MB, MIT) | [askhaYerga/whisper-turbo-ksc2-kk-spontaneous-lora](https://huggingface.co/askhaYerga/whisper-turbo-ksc2-kk-spontaneous-lora) — DOI [10.57967/hf/11281](https://doi.org/10.57967/hf/11281) |
+| Base model it adapts (MIT) | [abilmansplus/whisper-turbo-ksc2](https://huggingface.co/abilmansplus/whisper-turbo-ksc2) |
 
 ## Licence
 

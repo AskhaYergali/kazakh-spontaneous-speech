@@ -71,6 +71,15 @@ error; this is the reason.
   ablation.
 - This file.
 
+Merged from v1.0.1 on `main`: the paired session bootstrap for the register gap,
+its per-utterance error counts and the resulting interval table, a Zenodo DOI
+badge and a link to the trained LoRA adapter in `README.md`. The three bootstrap
+files were renamed from `*_table7*` to `*_register_gap*`, because what they
+compute is Table 9 of the present manuscript; naming them after a table number
+had already gone stale once. Running
+`eval/bootstrap_register_gap.py --counts eval/results/summaries/wer_counts_register_gap.csv`
+reproduces that table from released data alone, without the corpus.
+
 ### Changed: `eval/build_listener_set.py`
 
 Gained a `majority` mode, now the default, matching the ground truth of

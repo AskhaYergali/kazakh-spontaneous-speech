@@ -1,0 +1,7 @@
+model,condition,spont_wer,prep_wer,ratio,ratio_ci_lo,ratio_ci_hi,gap_pp,gap_ci_lo,gap_ci_hi,sessions
+whisper-turbo-ksc2,(a) fillers retained,17.78,12.67,1.4,1.13,1.77,5.11,2.1,7.74,24
+whisper-turbo-ksc2,(c) canonical,13.48,12.22,1.1,0.91,1.36,1.26,-1.38,3.66,24
+whisper-turbo-ksc2,(b) fillers removed,11.27,11.67,0.97,0.77,1.2,-0.4,-3.19,1.91,24
+whisper-turbo-kaz-rus-v1,(a) fillers retained,16.8,12.65,1.33,1.05,1.71,4.16,0.78,7.1,24
+whisper-turbo-kaz-rus-v1,(c) canonical,11.28,11.97,0.94,0.74,1.2,-0.7,-3.86,1.93,24
+whisper-turbo-kaz-rus-v1,(b) fillers removed,11.14,11.56,0.96,0.75,1.23,-0.42,-3.52,2.16,24
