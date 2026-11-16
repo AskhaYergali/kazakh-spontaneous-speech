@@ -60,11 +60,26 @@ error; this is the reason.
   `eval/harmony_fillers.py`, `eval/figure1_harmony.py`, `eval/score_sets.py`,
   `eval/build_supplementary.py` -- the scripts that produce the tables and
   figures of the paper, previously not released.
+- `eval/ablation.py` -- the ten rescored variants of Table 7. The eleventh row,
+  the filter without the reduplication stop-list, comes from
+  `eval/ablation_stoplist.py`, which runs the released filter twice.
+- `requirements.txt` -- the libraries the scripts in `eval/` need, pinned to the
+  versions the released results were produced with.
 - `eval/adjust_duration.py`, `eval/build_matched_control.py`,
   `eval/build_nonfiller_set.py`, `eval/build_listener_set.py`,
   `eval/ablation_stoplist.py` -- the scripts behind the controls and the
   ablation.
 - This file.
+
+### Changed: `eval/build_listener_set.py`
+
+Gained a `majority` mode, now the default, matching the ground truth of
+Section 5.2; the `adjudicated` mode is kept for comparison and is no longer
+described as the one the paper uses. Its docstring now also states why no
+recognition result on these sets is reported: 42 of the 45 utterances of the
+prepared side come from the Train partition and are recognised at 0.00% WER,
+so the comparison would measure memorisation of the training material rather
+than register.
 
 ### Documented
 
@@ -73,6 +88,9 @@ error; this is the reason.
   rescoring (see `README.md`).
 - Which analyses cannot be run from the released run files, because they need
   the reference text that KSC2's licence does not let us redistribute.
+- Which two files carry corpus word forms and why: the audited filler spellings
+  in `annotation/filler_spelling_audit_key.csv` and the repeated word types in
+  `filter/repetitions.csv`. No utterance is recoverable from either.
 
 ### Unchanged
 

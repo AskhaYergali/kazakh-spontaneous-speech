@@ -1,23 +1,36 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Пункт 1 рецензии: набор, в котором метка спонтанности получена НЕ от фильтра,
-а от слушателей (§5). Строит два набора в формате eval_zeroshot.py.
+build_listener_set.py -- evaluation sets whose spontaneity label comes from the
+listeners rather than from the filter (Section 5). Writes a spontaneous and a
+prepared set in the format eval_zeroshot.py reads.
 
-Запуск:
-    python build_listener_set.py \
+    python3 build_listener_set.py \
         --key   annotation/validation_key.csv \
         --l1    annotation/validation_listener_1.csv \
         --l2    annotation/validation_listener_2.csv \
+        --l3    annotation/validation_listener_3.csv \
         --manifest manifest/manifest.csv.gz \
         --corpus /path/to/ISSAI_KSC2 \
-        --truth agree \
+        --truth majority \
         --out sets/
 
-Режимы --truth:
-    agree       только случаи, где слушатели совпали независимо (основной)
-    l2          разметка второго слушателя, не участвовавшего в разработке фильтра
-    adjudicated как в статье: совпадения плюс согласованные решения
+--truth selects the ground truth:
+    majority     the rule of Section 5.2: a label only where at least two of the
+                 listeners concur. Needs --l3 to settle the items the first two
+                 left open; without it the rule reduces to `agree`.
+    agree        only the items on which the first two listeners agreed
+                 independently
+    l2           the labels of the second listener, who did not build the filter
+    adjudicated  the earlier adjudication by the first author, superseded in
+                 v1.1 by `majority` and kept for comparison
+
+The paper does not report a recognition result on these sets. On the prepared
+side the listener labels select mostly read material that the adapted models
+were trained on -- 42 of 45 of its utterances come from the Train partition and
+are recognised at 0.00% WER -- so the comparison measures memorisation of the
+training material rather than register, and reporting it would be misleading.
+The script is released so that the sets, and that objection, can be checked.
 """
 import argparse, csv, gzip, os, re, sys
 
@@ -35,7 +48,10 @@ def main():
                     help="нужен только для --truth adjudicated")
     ap.add_argument("--manifest", required=True)
     ap.add_argument("--corpus", required=True, help="корень распакованного KSC2")
-    ap.add_argument("--truth", default="agree", choices=["agree", "l2", "adjudicated"])
+    ap.add_argument("--l3", default=None,
+                    help="validation_listener_3.csv; needed by --truth majority")
+    ap.add_argument("--truth", default="majority",
+                    choices=["majority", "agree", "l2", "adjudicated"])
     ap.add_argument("--out", default="sets")
     args = ap.parse_args()
 
@@ -43,8 +59,20 @@ def main():
     l1 = {r["id"]: r["ОЦЕНКА"].strip() for r in rd(args.l1)}
     l2 = {r["id"]: r["ОЦЕНКА"].strip() for r in rd(args.l2)}
 
+    l3 = {r["id"]: r["ОЦЕНКА"].strip() for r in rd(args.l3)} if args.l3 else {}
+
     truth = {}
-    if args.truth == "agree":
+    if args.truth == "majority":
+        import collections
+        for i in key:
+            votes = [v for v in (l1.get(i, ""), l2.get(i, ""), l3.get(i, ""))
+                     if v in ("S", "P")]
+            if not votes:
+                continue
+            top, n = collections.Counter(votes).most_common(1)[0]
+            if n >= 2 and n > len(votes) - n:
+                truth[i] = top
+    elif args.truth == "agree":
         for i in key:
             if l1.get(i) == l2.get(i) and l1.get(i) in ("S", "P"):
                 truth[i] = l1[i]

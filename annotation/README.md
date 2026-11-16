@@ -38,7 +38,8 @@ agreement was 92 per cent, kappa 0.80.
 
 Because the first author was one of the two listeners and had also designed
 the filter, the 53 items the first two did not settle -- the 44 where they
-disagreed and the 9 neither could decide -- were given to an independent
+disagreed and the 9 that one of them could not decide -- were given to an
+independent
 third listener, under the same protocol, in randomised order and blind to
 the filter label, to the score, to the subcorpus and to both earlier
 judgements. The package was built by

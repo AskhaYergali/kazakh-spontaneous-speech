@@ -1,0 +1,28 @@
+# Dependencies of the scripts in eval/ and annotation_tools/, with the versions
+# the released results were produced with. Python 3.10 or newer.
+#
+# The filter itself (filter/spontaneity_filter.py) uses the standard library
+# only and needs nothing from this file.
+
+# analysis and figures -- validation_precision.py, ablation.py, supp_figures.py,
+# figure1_harmony.py, harmony_fillers.py
+numpy==1.26.4
+# scikit-learn is imported inside functions; without it supp_figures.py silently
+# skips the Section 5.3 panels of Figure S1 instead of failing.
+scikit-learn==1.4.2
+matplotlib==3.8.4
+Pillow==10.3.0               # build_supplementary.py, image aspect ratios
+python-docx==1.1.2           # build_supplementary.py
+
+# scoring -- eval_zeroshot.py, score_sets.py, adjust_duration.py
+jiwer==3.0.4
+
+# audio -- build_listener_set.py, build_nonfiller_set.py,
+# build_third_listener_task.py, make_ipad_package.py
+soundfile==0.12.1
+librosa==0.10.2.post1
+
+# recognition and adaptation -- eval_zeroshot.py, train_lora.py, downstream_eval.py
+torch==2.3.0
+transformers==4.41.2
+peft==0.11.1

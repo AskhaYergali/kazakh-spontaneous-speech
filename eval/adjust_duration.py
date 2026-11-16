@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Пункт 8 рецензии: выравнивание по длительности, два способа.
+adjust_duration.py -- Table 12: the register gap after standardizing the
+prepared control for utterance duration, in two ways.
 
   pooled          контроль перевзвешивается по распределению длительностей
                   спонтанного набора, состав сессий не контролируется

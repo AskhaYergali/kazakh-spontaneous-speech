@@ -3,9 +3,18 @@ message: "If you use this material, please cite both the repository and the pape
 title: "Kazakh Spontaneous Speech: Spontaneity Filter, Manifest and Annotations"
 version: "1.1.0"
 date-released: "2026-11-16"
-license: MIT
-license-url: "https://github.com/AskhaYergali/kazakh-spontaneous-speech/blob/main/LICENSE"
+doi: "10.5281/zenodo.23357132"
 repository-code: "https://github.com/AskhaYergali/kazakh-spontaneous-speech"
+license:
+  - MIT
+  - CC-BY-4.0
+license-url: "https://github.com/AskhaYergali/kazakh-spontaneous-speech/blob/v1.1.0/LICENSE"
+abstract: >-
+  Spontaneity filter, full utterance-level manifest, experimental sets and
+  human annotation results for a study of register-controlled evaluation of
+  speech recognition on spontaneous Kazakh-Russian conversational speech.
+  Code under MIT, data under CC BY 4.0; see LICENSE and LICENSE-DATA. No
+  audio and no transcript text of the underlying KSC2 corpus is redistributed.
 authors:
   - family-names: "Yergaliyev"
     given-names: "Askhat"
@@ -16,3 +25,16 @@ keywords:
   - Whisper
   - LoRA
   - code-switching
+preferred-citation:
+  type: article
+  status: submitted
+  title: "A Spontaneity Metric for Kazakh Transcripts: Register, Filled Pauses and the Evaluation of Spontaneous Speech"
+  journal: "Data"
+  year: 2026
+  authors:
+    - family-names: "Yergaliyev"
+      given-names: "Askhat"
+    - family-names: "Baibulekova"
+      given-names: "Lyailya"
+    - family-names: "Sharipbay"
+      given-names: "Altynbek"

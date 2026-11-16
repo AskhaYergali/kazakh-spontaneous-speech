@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Пункт 1 рецензии: спонтанный набор, отобранный БЕЗ участия филлеров.
+build_nonfiller_set.py -- the filler-free spontaneous set of Section 6.5:
+spontaneous material selected WITHOUT any contribution from fillers.
 
 Берёт высказывания из тех же сессий записи, что и основной спонтанный набор,
 в которых нет ни одного филлера — ни сильного, ни слабого, — но есть не менее

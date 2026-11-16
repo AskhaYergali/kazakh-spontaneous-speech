@@ -22,7 +22,8 @@ recomputed. `CHANGELOG.md` lists what moved and by how much.
 | `manifest/sets/` | the experimental sets: Golden Dataset, matched source control, random controls of 500 / 1000 / 2000 utterances, and `nonfiller_spont.csv`, the filler-free spontaneous set of Section 6.5 |
 | `annotation/` | human annotation results: formal validation (three listeners, ground truth by majority), calibration pass, filler-spelling audit, test-retest |
 | `annotation_tools/` | scripts that build the blind annotation packages and score them |
-| `eval/*.py` | evaluation and analysis scripts, including the ones that produce the tables and figures of the paper |
+| `eval/*.py` | evaluation and analysis scripts, including the ones that produce the tables and figures of the paper. Table 6 and Section 5.2 come from `validation_precision.py`, Table 7 from `ablation.py` and, for its last row, `ablation_stoplist.py`, Section 6.3 and Figure 1 from `harmony_fillers.py` and `figure1_harmony.py`, the Supplementary from `score_sets.py`, `supp_figures.py` and `build_supplementary.py` |
+| `requirements.txt` | the libraries those scripts need, pinned to the versions the released results were produced with |
 | `eval/results/asr_runs/` | per-utterance recognition results of every run: utterance id, domain, spontaneity score, duration, utterance WER |
 | `eval/results/summaries/` | aggregated WER/CER tables and the downstream NER results, prefixed with the working folder they came from |
 | `eval/results/PROVENANCE.csv` | every original path in the working tree, the released file it maps to, and its SHA-256 |
@@ -43,11 +44,17 @@ repository's `filter/` and `eval/` scripts at the corpus root, and re-run
 them; the manifest here lets you verify that your run reproduces our scores
 row by row.
 
-Every table in this repository has had its text columns removed
+Every table in this repository has had its utterance-text columns removed
 (`text`, `preview`, `reference`, `hypothesis` and the Russian-named
-equivalents in the annotation files). A regular-expression check over the
-released files confirms that no corpus text remains; `SHA256SUMS.txt` fixes
-the contents of the release.
+equivalents in the annotation files), and a check over the released files
+confirms that no transcript of an utterance remains. Two files do carry
+corpus word forms, by design and without any utterance being recoverable
+from them: `annotation/filler_spelling_audit_key.csv` records the two
+spellings of a filled pause that were compared at each audited position, in
+its `ref` and `hyp` columns, and `filter/repetitions.csv` lists 544 word
+types with the number of times each is immediately repeated across the
+corpus, which is what the reduplication stop-list was built from.
+`SHA256SUMS.txt` fixes the contents of the release.
 
 One consequence is worth stating plainly. Any analysis that rescores the
 recognition output -- the canonical and filler-removed conditions, and the
