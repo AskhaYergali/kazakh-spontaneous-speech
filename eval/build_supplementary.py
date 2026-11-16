@@ -204,12 +204,15 @@ def main():
     P("Tables S1–S4 are produced by eval/score_sets.py, Table S5 and the validation figures of Table 6 "
       "and Section 5.2 by eval/validation_precision.py, Figures S1–S3 by eval/supp_figures.py, and the "
       "analysis of Section 6.3 together with Figure 1 by eval/harmony_fillers.py and "
-      "eval/figure1_harmony.py. This document is assembled from their output by "
+      "eval/figure1_harmony.py. The ablation of Table 7 is produced by eval/ablation.py, except "
+      "for its last row, the filter without the reduplication stop-list, which comes from "
+      "eval/ablation_stoplist.py. This document is assembled from their output by "
       "eval/build_supplementary.py. Running eval/supp_figures.py also prints the out-of-fold AUCs of "
       "Section 5.3 over forty cross-validation splits and the comparison of the hand-set weights with the fitted coefficients on both scales, raw and per standard deviation. All of these read the per-utterance evaluation "
       "files written by eval/eval_zeroshot.py. The copies of those files in the public release carry no "
       "reference or hypothesis text, since that text is KSC2 material and may not be redistributed; they "
-      "must be regenerated against a local copy of the corpus.")
+      "must be regenerated against a local copy of the corpus. requirements.txt pins the library "
+      "versions these scripts were run with.")
     d.save(a.out)
     print("wrote", a.out)
 
