@@ -76,10 +76,12 @@ error; this is the reason.
 Gained a `majority` mode, now the default, matching the ground truth of
 Section 5.2; the `adjudicated` mode is kept for comparison and is no longer
 described as the one the paper uses. Its docstring now also states why no
-recognition result on these sets is reported: 42 of the 45 utterances of the
-prepared side come from the Train partition and are recognised at 0.00% WER,
-so the comparison would measure memorisation of the training material rather
-than register.
+recognition result on these sets is reported: under the majority rule 53 of
+the 57 utterances of the prepared side come from the Train partition, and the
+45-item set the `agree` rule produces, 42 of them from Train, was recognised
+at 0.00% WER, so the comparison would measure memorisation of the training
+material rather than register. The Train overlap can be checked from
+`annotation/validation_key.csv` and the listener files alone.
 
 ### Documented
 
