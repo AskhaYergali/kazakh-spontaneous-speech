@@ -25,15 +25,16 @@ prepared set in the format eval_zeroshot.py reads.
     adjudicated  the earlier adjudication by the first author, superseded in
                  v1.1 by `majority` and kept for comparison
 
-The paper does not report a recognition result on these sets. On the prepared
-side the listener labels select mostly read material that the adapted models
-were trained on: under `majority` 53 of its 57 utterances come from the Train
-partition, and the 45-item set that `agree` produces, 42 of them from Train,
-was recognised at 0.00% WER. The comparison therefore measures memorisation of
-the training material rather than register, and reporting it would be
-misleading. The script is released so that the sets, and that objection, can
-be checked: the Train overlap follows from annotation/validation_key.csv and
-the listener files alone, without the corpus.
+The paper does not report a recognition result on these sets, for a reason
+that can be checked from annotation/validation_key.csv and the listener files
+alone, without the corpus: both sides are drawn mostly from the Train
+partition the adapted models were trained on. Under `majority` that is 53 of
+the 57 prepared utterances and 119 of the 139 spontaneous ones; under `agree`,
+42 of 45 and 89 of 102. A comparison on them would measure memorisation of the
+training material rather than register, and restricting it to unseen material
+is not possible either: outside Train only 4 prepared and 20 spontaneous
+utterances remain. The script is released so that the sets, and that
+objection, can be checked.
 """
 import argparse, csv, gzip, os, re, sys
 
