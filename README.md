@@ -4,6 +4,13 @@ Supplementary material for the study of register-controlled evaluation and
 parameter-efficient adaptation of Whisper on spontaneous Kazakh-Russian
 conversational speech.
 
+## Version
+
+This is **v1.1**. The ground truth of the formal validation changed in this
+version: it is now the majority judgement of three listeners rather than
+adjudication by the first author, and every corpus-weighted figure was
+recomputed. `CHANGELOG.md` lists what moved and by how much.
+
 ## What is here
 
 | Path | Contents |
@@ -12,10 +19,10 @@ conversational speech.
 | `filter/lexicons.json` | the nine lexicons and the nine feature weights, with version and SHA-256 |
 | `filter/repetitions.csv` | word types with immediate repeats across the corpus, used to build the reduplication stop-list |
 | `manifest/manifest.csv.gz` | the full manifest: one row per KSC2 utterance, with all feature counters, the score, and the spontaneity label |
-| `manifest/sets/` | the experimental sets: Golden Dataset, matched source control, random controls of 500 / 1000 / 2000 utterances |
-| `annotation/` | human annotation results: formal validation (two annotators), calibration pass, filler-spelling audit, adjudicated disagreements |
+| `manifest/sets/` | the experimental sets: Golden Dataset, matched source control, random controls of 500 / 1000 / 2000 utterances, and `nonfiller_spont.csv`, the filler-free spontaneous set of Section 6.5 |
+| `annotation/` | human annotation results: formal validation (three listeners, ground truth by majority), calibration pass, filler-spelling audit, test-retest |
 | `annotation_tools/` | scripts that build the blind annotation packages and score them |
-| `eval/*.py` | evaluation scripts |
+| `eval/*.py` | evaluation and analysis scripts, including the ones that produce the tables and figures of the paper |
 | `eval/results/asr_runs/` | per-utterance recognition results of every run: utterance id, domain, spontaneity score, duration, utterance WER |
 | `eval/results/summaries/` | aggregated WER/CER tables and the downstream NER results, prefixed with the working folder they came from |
 | `eval/results/PROVENANCE.csv` | every original path in the working tree, the released file it maps to, and its SHA-256 |
@@ -41,6 +48,14 @@ Every table in this repository has had its text columns removed
 equivalents in the annotation files). A regular-expression check over the
 released files confirms that no corpus text remains; `SHA256SUMS.txt` fixes
 the contents of the release.
+
+One consequence is worth stating plainly. Any analysis that rescores the
+recognition output -- the canonical and filler-removed conditions, and the
+duration-standardised tables of Section 6.5 -- needs the reference text and
+therefore cannot be run against the released `eval/results/asr_runs/` files
+as they stand. Regenerate those files with `eval/eval_zeroshot.py` against
+your own copy of KSC2 first. Everything that reads only the manifest, the
+annotation files or the per-utterance WER column runs directly.
 
 ## Thresholds
 
