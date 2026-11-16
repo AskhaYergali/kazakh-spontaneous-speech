@@ -1,0 +1,3 @@
+model,set,n,beam,language,wer_retained,cer_retained,wer_canon,cer_canon,wer_stripped,cer_stripped
+abilmansplus/whisper-turbo-ksc2,nonfiller_spont,155,5,kk,0.14975,0.07054,0.14975,0.07104,0.14604,0.06898
+abilmansplus/whisper-turbo-kaz-rus-v1,nonfiller_spont,155,5,kk,0.15182,0.06736,0.15182,0.06811,0.14604,0.06461
