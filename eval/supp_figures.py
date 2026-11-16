@@ -11,7 +11,7 @@ supp_figures.py -- Supplementary figures.
       for both Kazakh-adapted models
 
     python3 supp_figures.py --manifest manifest/manifest.csv.gz \
-        --validation-dir annotation --runs-dir results --out supp/
+        --validation-dir annotation --runs-dir eval/results/asr_runs --out supp/
 """
 import argparse, csv, gzip, math, os
 

@@ -12,12 +12,12 @@
 Если разрыв сохраняется и на этом наборе, вывод «разрыв несёт регистр» не
 может быть артефактом отбора по филлерам.
 
-Запуск на поде:
+Запуск:
     python3 build_nonfiller_set.py \
-        --manifest ~/ksc-repo/manifest/manifest.csv.gz \
-        --spont-set ~/ksc-repo/manifest/sets/golden_spont_eval.csv \
-        --prep-set  ~/ksc-repo/manifest/sets/golden_prep_eval_matched.csv \
-        --corpus /workspace --out sets/
+        --manifest manifest/manifest.csv.gz \
+        --spont-set manifest/sets/golden_spont_eval.csv \
+        --prep-set  manifest/sets/golden_prep_eval_matched.csv \
+        --corpus /path/to/ISSAI_KSC2 --out sets/
 """
 import argparse, csv, gzip, os, re, sys
 

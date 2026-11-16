@@ -86,7 +86,7 @@ class Frame:
         return [q(v) for v in acc]
 
 
-def build(release):
+def build(release, listener3=None):
     man = read(os.path.join(release, "manifest", "manifest.csv.gz"))
     N = collections.Counter((r["domain"].split("/")[-1], r["label"]) for r in man)
     A = os.path.join(release, "annotation")
@@ -96,11 +96,21 @@ def build(release):
     l2 = {r["id"]: g(r) for r in read(os.path.join(A, "validation_listener_2.csv"))}
     adj = {r["id"]: r["СОГЛАСОВАННАЯ"].strip().upper()
            for r in read(os.path.join(A, "validation_disagreements.csv"))}
+    l3 = {}
+    if listener3:
+        l3 = {r["id"]: g(r) for r in read(listener3)}
     ok = lambda v: v in ("S", "P")
 
-    adjudicated, agreed, listener2, adversarial = {}, {}, {}, {}
+    adjudicated, agreed, listener2, adversarial, majority = {}, {}, {}, {}, {}
     for i, r in key.items():
-        a, b = l1.get(i, ""), l2.get(i, "")
+        a, b, c = l1.get(i, ""), l2.get(i, ""), l3.get(i, "")
+        # primary: majority of the listeners who reached a decision, and only
+        # where at least two of them concur, so that no label rests on one person
+        votes = [v for v in (a, b, c) if ok(v)]
+        if votes:
+            top, n = collections.Counter(votes).most_common(1)[0]
+            if n >= 2 and n > len(votes) - n:
+                majority[i] = top
         if ok(a) and ok(b) and a == b:
             adjudicated[i] = agreed[i] = adversarial[i] = a
         elif ok(adj.get(i, "")):
@@ -110,27 +120,35 @@ def build(release):
             filt = "S" if float(r["score"]) >= THETA1 else "P"
             cand = [v for v in (a, b) if ok(v)]
             adversarial[i] = ("P" if filt == "S" else "S") if any(
-                v != filt for v in cand) else adjudicated[i]
+                v != filt for v in cand) else adj[i]
         if ok(b):
             listener2[i] = b
-    return man, N, key, {"adjudication": adjudicated, "listener agreement only": agreed,
-                         "second listener alone": listener2,
-                         "every disagreement against the filter": adversarial}
+    out = {}
+    if l3:
+        out["majority of three listeners"] = majority
+    out.update({"first author adjudicates": adjudicated,
+                "listener agreement only": agreed,
+                "second listener alone": listener2,
+                "every disagreement against the filter": adversarial})
+    return man, N, key, out
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--release", default=".")
     ap.add_argument("--boot", type=int, default=10000)
+    ap.add_argument("--listener3", help="validation_listener_3.csv, if a third listener settled "
+                                        "the items the first two did not")
     a = ap.parse_args()
-    man, N, key, truths = build(a.release)
+    man, N, key, truths = build(a.release, a.listener3)
     scored = sum(v for k, v in N.items() if k[1] != "too_short")
     print("corpus %d utterances, %d scored, %d below the six-token floor\n"
           % (len(man), scored, len(man) - scored))
 
-    F = Frame("adjudication", truths["adjudication"], key, N)
+    primary = next(iter(truths))
+    F = Frame(primary, truths[primary], key, N)
     ids = sorted(F.truth)
-    print("=== Table 6 (ground truth: adjudication, %d items) ===" % len(ids))
+    print("=== Table 6 (ground truth: %s, %d items) ===" % (primary, len(ids)))
     print("%-12s %-28s %-28s %-18s %s" % ("decision", "precision sample / weighted",
                                           "recall sample / weighted", "F1 weighted", "n"))
     for nm, sel, pos in (("strict", lambda s: s >= THETA1, "S"),
@@ -144,10 +162,24 @@ def main():
         print("%-12s %.2f [%.2f-%.2f] / %.2f [%.2f-%.2f]  %.2f [%.2f-%.2f] / %.2f [%.2f-%.2f]  "
               "%.2f [%.2f-%.2f]  %d"
               % (nm, sP, cP[0], cP[1], P, pl, ph, sR, cR[0], cR[1], R, rl, rh, Fs, fl, fh, int(tp + fp)))
+        if nm == "inclusive":
+            R_incl = R
     tot = sum(F.w[i] for i in ids if F.truth[i] == "S")
     base = sum(F.w[i] for i in ids)
     print("\nextrapolated spontaneous {:,.0f} of {:,.0f} scored = {:.1f}%".format(
         tot, base, 100 * tot / base))
+
+    worst = []
+    for drop in ids:
+        kept = [i for i in ids if i != drop]
+        G = Frame(primary, {i: F.truth[i] for i in kept}, key, N)
+        _, R2, _ = G.prf(kept, lambda s: s >= THETA2)
+        worst.append((abs(R2 - R_incl), drop, R2))
+    worst.sort(reverse=True)
+    print("\nleave-one-out influence on inclusive weighted recall (%.3f with every item):" % R_incl)
+    for d, i, r2 in worst[:3]:
+        print("  without %-5s %-42s recall %.3f  (%+.3f)"
+              % (i, key[i]["stratum"], r2, r2 - R_incl))
 
     print("\n=== Section 5.2: weighted precision of the strict decision under four ground truths ===")
     for nm, t in truths.items():

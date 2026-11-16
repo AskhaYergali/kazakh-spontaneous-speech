@@ -9,9 +9,9 @@ package reveals the answer: no filter label, no score, no subcorpus, no original
 file name, no earlier judgement, and the order is randomized with a recorded seed.
 
     python3 build_third_listener_task.py \
-        --ksc2 ~/Downloads/ISSAI_KSC2 \
-        --annotation ~/path/to/kazakh-spontaneous-speech/annotation \
-        --out ~/Desktop/Оценка\\ речи
+        --ksc2 /path/to/ISSAI_KSC2 \
+        --annotation /path/to/release/annotation \
+        --out third_listener_package
 
 By default the package holds the 53 items the two listeners did not settle: the
 44 where they disagreed and the 9 neither could decide.  --subset all takes the

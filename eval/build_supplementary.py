@@ -139,12 +139,16 @@ def main():
     l2 = {r["id"]: g(r) for r in csv.DictReader(open(os.path.join(A, "validation_listener_2.csv"), encoding="utf-8"))}
     adj = {r["id"]: r["СОГЛАСОВАННАЯ"].strip().upper()
            for r in csv.DictReader(open(os.path.join(A, "validation_disagreements.csv"), encoding="utf-8"))}
+    l3 = {r["id"]: g(r) for r in csv.DictReader(
+        open(os.path.join(A, "validation_listener_3.csv"), encoding="utf-8-sig"))} \
+        if os.path.exists(os.path.join(A, "validation_listener_3.csv")) else {}
     dec = set()
     for i, r in key.items():
-        a_, b_ = l1.get(i, ""), l2.get(i, "")
-        t = a_ if (a_ in ("S", "P") and a_ == b_) else adj.get(i, "")
-        if t in ("S", "P"):
-            dec.add(i)
+        votes = [v for v in (l1.get(i, ""), l2.get(i, ""), l3.get(i, "")) if v in ("S", "P")]
+        if votes:
+            top, n = collections.Counter(votes).most_common(1)[0]
+            if n >= 2 and n > len(votes) - n:
+                dec.add(i)
     drawn = collections.Counter(r["stratum"] for r in key.values())
     ndec = collections.Counter(key[i]["stratum"] for i in dec)
     N = collections.Counter()
@@ -159,13 +163,13 @@ def main():
     ts = sum(N[k] for k in N if k[1] == "too_short")
     rows.append(["not sampled", "below the six-token floor", "{:,}".format(ts), 0, 0, "—"])
     rows.append(["total", "", "{:,}".format(tN + ts), td, tn, ""])
-    TBL(["Subcorpus", "Filter label", "Stratum N", "Drawn", "Decidable", "Weight N / decidable"], rows, 8)
+    TBL(["Subcorpus", "Filter label", "Stratum N", "Drawn", "Settled", "Weight N / settled"], rows, 8)
     CAP("Table S5. The stratified sample behind Section 5.2 and Table 6. Strata are the crossing of the "
         "six subcorpora with the three filter labels, and the stratum sizes N are counted in the released "
-        "manifest. Two hundred items were drawn; nine could not be decided by ear and are dropped, so each "
-        "remaining item carries the Horvitz–Thompson weight N divided by the number of DECIDABLE items "
-        "drawn from its stratum, which is the last column. The weights span four orders of magnitude, from "
-        "1.6 in television-news material the filter calls spontaneous to 24,843 in crowdsourced material "
+        "manifest. Two hundred items were drawn; four were not settled by two of the three listeners and "
+        "are dropped, so each remaining item carries the Horvitz–Thompson weight N divided by the number "
+        "of settled items drawn from its stratum, which is the last column. The weights span four orders of magnitude, from "
+        "1.6 in television-news material the filter calls spontaneous to 22,585 in crowdsourced material "
         "it calls prepared, which is why every precision and recall figure in the paper is reported "
         "corpus-weighted and why its interval comes from a bootstrap stratified on these 18 cells. The "
         "frame covers the 426,784 utterances the metric scores; the 59,166 utterances below the six-token "
@@ -175,16 +179,14 @@ def main():
     S = os.path.join(W, "supp")
     FIG(os.path.join(S, "FigureS1.png"),
         "Figure S1. Above: corpus-weighted precision against the volume selected from KSC2, for the "
-        "hand-set score and for both fits of the logistic regression of Section 5.3, each ranked over the "
-        "191 adjudicated items. Each curve is a step function: selecting any volume between two ranked "
-        "items takes exactly the items above it, so the precision is constant in between. The dotted line "
-        "is the volume the filter selects at θ₂, and the marker on each curve gives the precision there: "
-        "0.98 for the score against 0.47 and 0.38 for the two fits. At the smaller volume the strict "
-        "threshold selects, 8,540 utterances, the three are equivalent: 0.98 against 1.00 and 0.97. The "
-        "advantage of the hand-set score is therefore specific to the inclusive operating point. Below: "
-        "the volume selected as a function of the threshold, which is how a threshold is translated into "
-        "a corpus size. The fits are out-of-fold at one declared cross-validation split; Section 5.3 "
-        "reports how far the fitted figures move with the split.", 4.7)
+        "hand-set score and for both fits of the logistic regression of Section 5.3, each ranked over "
+        "the 196 majority-labelled items. Each curve is a step function: selecting any volume between "
+        "two ranked items takes exactly the items above it, so the precision is constant in between. "
+        "The dotted line is the volume the filter selects at θ₂, and the marker gives the precision of "
+        "the score there. The two fits are drawn for one declared cross-validation split; they move a "
+        "great deal with the split, so no value is marked on them and Section 5.3 reports their median "
+        "and range over forty splits instead. Below: the volume selected as a function of the "
+        "threshold, which is how a threshold is translated into a corpus size.", 4.7)
     FIG(os.path.join(S, "FigureS2.png"),
         "Figure S2. Distribution of the spontaneity score over all 485,950 utterances of KSC2, by "
         "subcorpus, on a logarithmic count axis. The crowdsourced and television-news subcorpora are "
@@ -204,7 +206,7 @@ def main():
       "analysis of Section 6.3 together with Figure 1 by eval/harmony_fillers.py and "
       "eval/figure1_harmony.py. This document is assembled from their output by "
       "eval/build_supplementary.py. Running eval/supp_figures.py also prints the out-of-fold AUCs of "
-      "Section 5.3 over forty cross-validation splits. All of these read the per-utterance evaluation "
+      "Section 5.3 over forty cross-validation splits and the comparison of the hand-set weights with the fitted coefficients on both scales, raw and per standard deviation. All of these read the per-utterance evaluation "
       "files written by eval/eval_zeroshot.py. The copies of those files in the public release carry no "
       "reference or hypothesis text, since that text is KSC2 material and may not be redistributed; they "
       "must be regenerated against a local copy of the corpus.")

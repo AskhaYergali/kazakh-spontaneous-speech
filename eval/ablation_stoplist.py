@@ -8,11 +8,11 @@
 191 размеченных элементах. Логика подсчёта повторов при этом не переписывается,
 меняется только содержимое стоп-листа.
 
-Запуск на Mac, из каталога корпуса:
+Запуск из каталога корпуса:
     python3 ablation_stoplist.py \
-        --filter  ~/kazakh-spontaneous-speech/filter/spontaneity_filter.py \
-        --lexicons ~/kazakh-spontaneous-speech/filter/lexicons.json \
-        --annotation ~/kazakh-spontaneous-speech/annotation \
+        --filter  /path/to/release/filter/spontaneity_filter.py \
+        --lexicons /path/to/release/filter/lexicons.json \
+        --annotation /path/to/release/annotation \
         --corpus . --out ablation_stoplist.csv
 
 Полный проход по 485 950 расшифровкам занимает несколько минут.

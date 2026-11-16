@@ -13,8 +13,8 @@
 
 Запуск:
     python3 adjust_duration.py \
-        --spont results/results/abilmansplus__whisper-turbo-ksc2__spont_eval.csv \
-        --prep  results/results/abilmansplus__whisper-turbo-ksc2__prep_eval_matched.csv \
+        --spont results/asr_runs/abilmansplus__whisper-turbo-ksc2__spont_eval.csv \
+        --prep  results/asr_runs/abilmansplus__whisper-turbo-ksc2__prep_eval_matched.csv \
         --bins 3 --out table_adjusted_ksc2.csv
 """
 import argparse, collections, csv, math, random, re, sys
