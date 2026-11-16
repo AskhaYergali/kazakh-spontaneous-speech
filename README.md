@@ -51,7 +51,15 @@ The labels in `manifest/manifest.csv.gz` were produced with
     min_tokens = 6     below this, too_short
 
 The `score` column is threshold-independent, so other thresholds can be
-applied to it directly.
+applied to it directly. It is stored rounded to four decimal places, while
+the `label` column records the comparison against the unrounded score. The
+two can disagree exactly on a threshold: for one of the 584 utterances of the
+spontaneous evaluation set the unrounded score falls below `theta_1` by a
+floating-point residue of order 1e-15, so the row carries the borderline
+label at a recorded score of 5.0. Rescoring the counters with exact rational
+arithmetic reproduces the released label for 485,914 of the 485,950 rows; the
+36 exceptions all lie on `theta_1` and belong to no released evaluation or
+training set.
 
 ## Reproducing the manifest
 
