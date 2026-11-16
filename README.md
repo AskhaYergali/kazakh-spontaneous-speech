@@ -8,6 +8,13 @@ Supplementary material for the study of register-controlled evaluation and
 parameter-efficient adaptation of Whisper on spontaneous Kazakh-Russian
 conversational speech.
 
+## Version
+
+This is **v1.1**. The ground truth of the formal validation changed in this
+version: it is now the majority judgement of three listeners rather than
+adjudication by the first author, and every corpus-weighted figure was
+recomputed. `CHANGELOG.md` lists what moved and by how much.
+
 ## What is here
 
 | Path | Contents |
@@ -16,12 +23,13 @@ conversational speech.
 | `filter/lexicons.json` | the nine lexicons and the nine feature weights, with version and SHA-256 |
 | `filter/repetitions.csv` | word types with immediate repeats across the corpus, used to build the reduplication stop-list |
 | `manifest/manifest.csv.gz` | the full manifest: one row per KSC2 utterance, with all feature counters, the score, and the spontaneity label |
-| `manifest/sets/` | the experimental sets: Golden Dataset, matched source control, random controls of 500 / 1000 / 2000 utterances |
-| `annotation/` | human annotation results: formal validation (two annotators), calibration pass, filler-spelling audit, adjudicated disagreements |
+| `manifest/sets/` | the experimental sets: Golden Dataset, matched source control, random controls of 500 / 1000 / 2000 utterances, and `nonfiller_spont.csv`, the filler-free spontaneous set of Section 6.5 |
+| `annotation/` | human annotation results: formal validation (three listeners, ground truth by majority), calibration pass, filler-spelling audit, test-retest |
 | `annotation_tools/` | scripts that build the blind annotation packages and score them |
-| `eval/*.py` | evaluation scripts |
+| `eval/*.py` | evaluation and analysis scripts, including the ones that produce the tables and figures of the paper. Table 6 and Section 5.2 come from `validation_precision.py`, Table 7 from `ablation.py` and, for its last row, `ablation_stoplist.py`, Table 9 from `bootstrap_register_gap.py`, Section 6.3 and Figure 1 from `harmony_fillers.py` and `figure1_harmony.py`, the Supplementary from `score_sets.py`, `supp_figures.py` and `build_supplementary.py`. Scripts are named for what they compute, not for a table number |
+| `requirements.txt` | the libraries those scripts need, pinned to the versions the released results were produced with |
 | `eval/results/asr_runs/` | per-utterance recognition results of every run: utterance id, domain, spontaneity score, duration, utterance WER |
-| `eval/results/summaries/` | aggregated WER/CER tables and the downstream NER results, prefixed with the working folder they came from |
+| `eval/results/summaries/` | aggregated WER/CER tables and the downstream NER results, prefixed with the working folder they came from. `wer_counts_register_gap.csv` holds the per-utterance error counts under the three scoring conditions, which is enough to reproduce the register gap and its intervals without the corpus text |
 | `eval/results/PROVENANCE.csv` | every original path in the working tree, the released file it maps to, and its SHA-256 |
 
 Runs were produced over several sessions in overlapping working folders. Files
@@ -40,11 +48,25 @@ repository's `filter/` and `eval/` scripts at the corpus root, and re-run
 them; the manifest here lets you verify that your run reproduces our scores
 row by row.
 
-Every table in this repository has had its text columns removed
+Every table in this repository has had its utterance-text columns removed
 (`text`, `preview`, `reference`, `hypothesis` and the Russian-named
-equivalents in the annotation files). A regular-expression check over the
-released files confirms that no corpus text remains; `SHA256SUMS.txt` fixes
-the contents of the release.
+equivalents in the annotation files), and a check over the released files
+confirms that no transcript of an utterance remains. Two files do carry
+corpus word forms, by design and without any utterance being recoverable
+from them: `annotation/filler_spelling_audit_key.csv` records the two
+spellings of a filled pause that were compared at each audited position, in
+its `ref` and `hyp` columns, and `filter/repetitions.csv` lists 544 word
+types with the number of times each is immediately repeated across the
+corpus, which is what the reduplication stop-list was built from.
+`SHA256SUMS.txt` fixes the contents of the release.
+
+One consequence is worth stating plainly. Any analysis that rescores the
+recognition output -- the canonical and filler-removed conditions, and the
+duration-standardised tables of Section 6.5 -- needs the reference text and
+therefore cannot be run against the released `eval/results/asr_runs/` files
+as they stand. Regenerate those files with `eval/eval_zeroshot.py` against
+your own copy of KSC2 first. Everything that reads only the manifest, the
+annotation files or the per-utterance WER column runs directly.
 
 ## Thresholds
 
@@ -55,7 +77,15 @@ The labels in `manifest/manifest.csv.gz` were produced with
     min_tokens = 6     below this, too_short
 
 The `score` column is threshold-independent, so other thresholds can be
-applied to it directly.
+applied to it directly. It is stored rounded to four decimal places, while
+the `label` column records the comparison against the unrounded score. The
+two can disagree exactly on a threshold: for one of the 584 utterances of the
+spontaneous evaluation set the unrounded score falls below `theta_1` by a
+floating-point residue of order 1e-15, so the row carries the borderline
+label at a recorded score of 5.0. Rescoring the counters with exact rational
+arithmetic reproduces the released label for 485,914 of the 485,950 rows; the
+36 exceptions all lie on `theta_1` and belong to no released evaluation or
+training set.
 
 ## Reproducing the manifest
 

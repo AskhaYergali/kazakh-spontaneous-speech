@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Парный бутстреп по сессиям для Таблицы 7 статьи (Эксперимент A).
+"""bootstrap_register_gap.py -- the paired session bootstrap behind the register
+gap of the Kazakh-adapted models under the three scoring conditions, Table 9 of
+the paper. The file is named for what it computes rather than for a table
+number, which has already changed once.
+
+Парный бутстреп по сессиям для регистрового разрыва.
 
 Для каждой модели и каждого условия шкалирования считает WER на спонтанном
 наборе и на согласованном по сессиям подготовленном контроле, их отношение
@@ -13,9 +18,9 @@ WER считается на счётчиках ошибок (сумма ошиб
 а не как среднее поутвердительных WER.
 
 Два входа. Из полных прогонов с текстом (не публикуются по лицензии KSC2):
-    python bootstrap_table7.py --runs results/asr_runs --out table7_ci.csv
+    python bootstrap_register_gap.py --runs results/asr_runs --out register_gap_ci.csv
 Из публикуемого файла счётчиков ошибок (без текста) — воспроизводит ту же таблицу:
-    python bootstrap_table7.py --counts results/summaries/wer_counts_table7.csv
+    python bootstrap_register_gap.py --counts results/summaries/wer_counts_register_gap.csv
 """
 from __future__ import annotations
 import argparse, csv, os, re
@@ -89,7 +94,7 @@ def main():
     ap.add_argument("--counts", default=None,
                     help="файл счётчиков ошибок вместо полных прогонов")
     ap.add_argument("--runs", default="results/asr_runs")
-    ap.add_argument("--out", default="table7_ci.csv")
+    ap.add_argument("--out", default="register_gap_ci.csv")
     a = ap.parse_args()
     out = []
     for tag in MODELS:

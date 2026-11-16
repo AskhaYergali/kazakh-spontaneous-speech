@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Оценка спонтанности речи</title>
+<style>
+  :root{
+    --bg:#faf9f7; --card:#ffffff; --ink:#1f2328; --ink2:#5a6169; --muted:#8b9198;
+    --line:#e3e1dd; --accent:#0072B2; --spont:#0072B2; --prep:#D55E00; --skip:#8b9198;
+    --ok:#009E73; --shadow:0 1px 2px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 16px 64px}
+  header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px}
+  h1{font-size:17px;font-weight:600;margin:0;letter-spacing:-.01em}
+  .count{font-variant-numeric:tabular-nums;color:var(--ink2);font-size:15px}
+  .bar{height:5px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:26px}
+  .bar>i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .25s ease}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 24px;box-shadow:var(--shadow)}
+  .item{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);letter-spacing:.06em;
+    text-transform:uppercase;margin-bottom:18px}
+  audio{width:100%;margin-bottom:6px}
+  .replay{display:inline-flex;align-items:center;gap:7px;background:none;border:1px solid var(--line);
+    color:var(--ink2);border-radius:9px;padding:7px 13px;font-size:14px;cursor:pointer}
+  .replay:hover{background:#f4f2ef}
+  .audio-wrap{margin-bottom:26px}
+  .q{font-size:14px;color:var(--ink2);margin:0 0 11px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+  button.big{appearance:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;
+    padding:17px 14px;font-size:16px;font-weight:550;color:var(--ink);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:4px;transition:border-color .12s,background .12s}
+  kbd{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+    border:1px solid var(--line);border-radius:4px;padding:3px 5px;background:#fbfaf9;
+    margin-left:6px;vertical-align:middle}
+  button.big kbd{margin-left:0}
+  .next kbd{color:#bcdcf1;border-color:#3f93cc;background:rgba(255,255,255,.12)}
+  button.big:hover{background:#f7f5f2}
+  button.big.s.on{border-color:var(--spont);background:#eaf4fb;color:var(--spont)}
+  button.big.p.on{border-color:var(--prep);background:#fdf0e8;color:var(--prep)}
+  button.skip{width:100%;border:1px dashed var(--line);background:none;border-radius:10px;padding:11px;
+    font-size:14px;color:var(--muted);cursor:pointer;margin-bottom:26px}
+  button.skip:hover{background:#f4f2ef}
+  button.skip.on{border-style:solid;border-color:var(--skip);background:#f1f1f0;color:var(--ink2)}
+  .conf{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:24px}
+  .conf button{appearance:none;border:1.5px solid var(--line);background:#fff;border-radius:10px;
+    padding:12px 8px;font-size:14px;color:var(--ink);cursor:pointer}
+  .conf button:hover{background:#f7f5f2}
+  .conf button.on{border-color:var(--accent);background:#eaf4fb;color:var(--accent);font-weight:600}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .next{appearance:none;border:none;border-radius:11px;padding:14px 26px;font-size:16px;font-weight:600;
+    background:var(--accent);color:#fff;cursor:pointer}
+  .next[disabled]{background:#cfd4d8;cursor:not-allowed}
+  .back{appearance:none;background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:8px}
+  .back[disabled]{opacity:.35;cursor:not-allowed}
+  .note{font-size:13px;color:var(--muted);margin-top:18px;line-height:1.5}
+  .warn{background:#fdf6e3;border:1px solid #f0e2b6;color:#6b5a1f;border-radius:10px;
+    padding:11px 14px;font-size:13.5px;margin-bottom:18px}
+  details{margin-top:26px;border-top:1px solid var(--line);padding-top:18px}
+  summary{cursor:pointer;font-size:14px;color:var(--ink2);font-weight:550}
+  details .body{font-size:14.5px;color:var(--ink2);margin-top:14px}
+  details h3{font-size:14.5px;color:var(--ink);margin:18px 0 6px}
+  details ul{margin:6px 0 0;padding-left:20px} details li{margin:3px 0}
+  .done{text-align:center;padding:26px 10px}
+  .done .tick{width:46px;height:46px;border-radius:50%;background:#e6f6f1;color:var(--ok);
+    display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px}
+  .done h2{font-size:19px;margin:0 0 8px} .done p{color:var(--ink2);margin:0 0 22px}
+  .save{appearance:none;border:none;border-radius:11px;padding:15px 30px;font-size:16px;font-weight:600;
+    background:var(--ok);color:#fff;cursor:pointer}
+  .saved{font-size:14px;color:var(--ok);margin-top:16px;min-height:20px}
+  .draft{display:block;margin:20px auto 0;background:none;border:none;color:var(--muted);
+    font-size:13px;cursor:pointer;text-decoration:underline}
+  @media (max-width:520px){ .row{grid-template-columns:1fr} .wrap{padding-top:18px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1>Оценка спонтанности речи</h1><div class="count" id="count"></div></header>
+  <div class="bar"><i id="bar" style="width:0%"></i></div>
+  <div id="nostore" class="warn" style="display:none">
+    Браузер не разрешает автосохранение для локального файла. Не закрывайте вкладку до конца
+    работы, либо нажимайте «сохранить черновик» время от времени.
+  </div>
+  <div id="app"></div>
+  <details>
+    <summary>Инструкция — открыть</summary>
+    <div class="body" id="protocol"></div>
+  </details>
+</div>
+<script>
+const ITEMS = __ITEMS__;
+const KEY = "third_listener_v1";
+let answers = {}, idx = 0, storeOk = true;
+try { const raw = localStorage.getItem(KEY); if (raw) { const o = JSON.parse(raw);
+        answers = o.answers || {}; idx = Math.min(o.idx || 0, ITEMS.length); } }
+catch (e) { storeOk = false; }
+try { localStorage.setItem(KEY + "_probe", "1"); localStorage.removeItem(KEY + "_probe"); }
+catch (e) { storeOk = false; }
+if (!storeOk) document.getElementById("nostore").style.display = "block";
+
+function persist(){ try { localStorage.setItem(KEY, JSON.stringify({answers, idx})); } catch(e){} }
+const el = id => document.getElementById(id);
+
+function csv(){
+  let out = "﻿запись,ОЦЕНКА,УВЕРЕННОСТЬ\n";
+  ITEMS.forEach(it => { const a = answers[it.item] || {};
+    out += it.item + "," + (a.v || "") + "," + (a.c || "") + "\n"; });
+  return out;
+}
+function download(){
+  const b = new Blob([csv()], {type:"text/csv;charset=utf-8"});
+  const u = URL.createObjectURL(b), a = document.createElement("a");
+  a.href = u; a.download = "third_listener_results.csv"; a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 2000);
+}
+
+function render(){
+  const n = ITEMS.length;
+  el("bar").style.width = (100 * Math.min(idx, n) / n) + "%";
+  if (idx >= n){
+    el("count").textContent = n + " из " + n;
+    el("app").innerHTML =
+      '<div class="card done"><div class="tick">&#10003;</div><h2>Готово</h2>' +
+      '<p>Все ' + n + ' записей оценены. Сохраните файл и отправьте его.</p>' +
+      '<button class="save" id="save">Сохранить результат</button>' +
+      '<div class="saved" id="savedmsg"></div>' +
+      '<button class="draft" id="again">вернуться к последней записи</button></div>';
+    el("save").onclick = () => { download(); el("savedmsg").textContent =
+      "Файл third_listener_results.csv сохранён в «Загрузки»."; };
+    el("again").onclick = () => { idx = n - 1; persist(); render(); };
+    return;
+  }
+  const it = ITEMS[idx], a = answers[it.item] || {};
+  el("count").textContent = (idx + 1) + " из " + n;
+  el("app").innerHTML =
+    '<div class="card">' +
+      '<div class="item">запись ' + it.item + '</div>' +
+      '<div class="audio-wrap">' +
+        '<audio id="au" src="audio/' + it.file + '" controls preload="auto"></audio>' +
+        '<button class="replay" id="replay">&#9654;&#9654; прослушать снова <kbd>пробел</kbd></button>' +
+      '</div>' +
+      '<p class="q">Это спонтанная речь или подготовленная?</p>' +
+      '<div class="row">' +
+        '<button class="big s' + (a.v === "S" ? " on" : "") + '" data-v="S">спонтанная<kbd>S</kbd></button>' +
+        '<button class="big p' + (a.v === "P" ? " on" : "") + '" data-v="P">подготовленная<kbd>P</kbd></button>' +
+      '</div>' +
+      '<button class="skip' + (a.v === "-" ? " on" : "") + '" data-v="-">на слух решить невозможно <kbd>0</kbd></button>' +
+      '<p class="q">Насколько вы уверены?</p>' +
+      '<div class="conf">' +
+        '<button data-c="1" class="' + (a.c === "1" ? "on" : "") + '">уверен <kbd>1</kbd></button>' +
+        '<button data-c="2" class="' + (a.c === "2" ? "on" : "") + '">скорее уверен <kbd>2</kbd></button>' +
+        '<button data-c="3" class="' + (a.c === "3" ? "on" : "") + '">не уверен <kbd>3</kbd></button>' +
+      '</div>' +
+      '<div class="nav">' +
+        '<button class="back" id="back"' + (idx === 0 ? " disabled" : "") + '>&larr; предыдущая</button>' +
+        '<button class="next" id="next"' + (a.v && a.c ? "" : " disabled") + '>дальше <kbd style="color:#cfe3f2;border-color:#4a9ed4">&#9166;</kbd></button>' +
+      '</div>' +
+      '<p class="note">Слушайте столько раз, сколько нужно. Вариант «решить невозможно» — только для ' +
+      'записей, где решение действительно нельзя принять: слишком коротко, неразборчиво или обрывается. ' +
+      'Если склоняетесь к одному из ответов, выберите его с уверенностью «не уверен».</p>' +
+      '<button class="draft" id="draft">сохранить черновик</button>' +
+    '</div>';
+
+  const au = el("au");
+  au.play().catch(() => {});
+  el("replay").onclick = () => { au.currentTime = 0; au.play().catch(() => {}); };
+  document.querySelectorAll("[data-v]").forEach(b => b.onclick = () => set("v", b.dataset.v));
+  document.querySelectorAll("[data-c]").forEach(b => b.onclick = () => set("c", b.dataset.c));
+  el("next").onclick = advance;
+  el("back").onclick = () => { if (idx > 0) { idx--; persist(); render(); } };
+  el("draft").onclick = download;
+}
+function set(k, v){
+  const it = ITEMS[idx]; answers[it.item] = answers[it.item] || {};
+  answers[it.item][k] = v; persist(); render();
+}
+function advance(){
+  const a = answers[ITEMS[idx].item] || {};
+  if (!a.v || !a.c) return;
+  idx++; persist(); render();
+}
+document.addEventListener("keydown", e => {
+  if (idx >= ITEMS.length) return;
+  const k = e.key.toLowerCase();
+  if (e.code === "Space"){ e.preventDefault(); const au = el("au");
+    if (au){ au.currentTime = 0; au.play().catch(() => {}); } return; }
+  if (k === "s" || k === "ы"){ set("v", "S"); return; }
+  if (k === "p" || k === "з"){ set("v", "P"); return; }
+  if (k === "0" || k === "-"){ set("v", "-"); return; }
+  if (k === "1" || k === "2" || k === "3"){ set("c", k); return; }
+  if (e.key === "Enter"){ e.preventDefault(); advance(); return; }
+  if (e.key === "ArrowLeft"){ if (idx > 0){ idx--; persist(); render(); } }
+});
+el("protocol").innerHTML = __PROTOCOL__;
+render();
+</script>
+</body>
+</html>

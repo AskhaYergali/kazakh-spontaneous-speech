@@ -4,6 +4,13 @@ Two separate annotation exercises on two different samples. They are not
 two passes over the same material, and their agreement figures are not
 interchangeable.
 
+Since v1.1 the ground truth of the formal validation is the **majority of
+three listeners**. A label is assigned only where at least two of the three
+concur, so no label rests on a single person. The figures below were
+recomputed under that rule; v1.0 used adjudication by the first author and
+reported a corpus-weighted recall of 0.087 for the strict decision where this
+version reports 0.072. See `../CHANGELOG.md`.
+
 ## Formal validation (`validation_*`, ids V001-V200)
 
 A stratified sample of 200 utterances, 18 strata crossing six subcorpora
@@ -24,22 +31,56 @@ excluded from every agreement and accuracy figure. `УВЕРЕННОСТЬ` is
 1 (certain) to 3 (uncertain).
 
 Agreement on the 191 items both listeners resolved to S or P: 77.0 per
-cent, Cohen's kappa 0.501. The 44 disagreements and their adjudicated
-labels are in `validation_disagreements.csv`; `A` is listener 1, `B` is
-listener 2, `СОГЛАСОВАННАЯ` is the label after the adjudicator re-listened
-to the audio. Thirty-six were resolved in favour of listener 1 and eight
-in favour of listener 2.
+cent, Cohen's kappa 0.501. On the 78 items where both were confident,
+agreement was 92 per cent, kappa 0.80.
 
-Against the adjudicated labels the filter's `likely_spontaneous` class has
-precision 0.824 and recall 0.415 on the sample, and precision 0.983 with
-recall 0.087 once the strata are weighted back to the corpus. The weighted
-pair is the one that describes the corpus; the unweighted pair describes
-the sample only. Precision is uneven across subcorpora: 12/12 on podcasts,
-12/12 on radio, 11/11 on talkshow, 10/12 on parliament, 10/11 on tv_news
-and 1/10 on crowdsourced. The filter is not reliable on crowdsourced
-speech, which is why that subcorpus carries no interpretive weight in the
-study. The six counts sum to 56 correct out of 68 positives, which is the
-0.824 reported above.
+### The third listener (`validation_listener_3.csv`)
+
+Because the first author was one of the two listeners and had also designed
+the filter, the 53 items the first two did not settle -- the 44 where they
+disagreed and the 9 that one of them could not decide -- were given to an
+independent
+third listener, under the same protocol, in randomised order and blind to
+the filter label, to the score, to the subcorpus and to both earlier
+judgements. The package was built by
+`../annotation_tools/build_third_listener_task.py` with seed 20261115.
+Columns are `id`, `record_id`, `ОЦЕНКА` and `УВЕРЕННОСТЬ`, as for the other
+two; one item was returned as `-`, meaning no decision.
+
+The third listener sided with listener 1 in 37 of the 44 disagreements and
+reproduced the earlier joint adjudication in 41 of them (kappa 0.824). A
+three-way agreement coefficient is not reported: the third listener heard
+only the 53 unsettled items, and on a subset selected for disagreement any
+such coefficient describes the selection rather than the listeners.
+
+`validation_disagreements.csv` is kept for reference. It records the earlier
+adjudication by the first author -- `A` is listener 1, `B` is listener 2,
+`СОГЛАСОВАННАЯ` is the label after re-listening -- and is no longer the
+ground truth.
+
+### Ground truth and the figures it gives
+
+Majority of the three listeners: 147 items where the first two agreed
+independently, plus 49 settled by the third. Four items remain undecided
+and are dropped, leaving **196** of the 200.
+
+Against those labels the filter's `likely_spontaneous` class has precision
+0.824 and recall 0.403 on the sample, and precision 0.983 with recall 0.072
+once the strata are weighted back to the corpus. The weighted pair is the
+one that describes the corpus; the unweighted pair describes the sample
+only. Precision is uneven across subcorpora: 12/12 on podcasts, 12/12 on
+radio, 11/11 on talkshow, 10/12 on parliament, 10/11 on tv_news and 1/10 on
+crowdsourced. The filter is not reliable on crowdsourced speech, which is
+why that subcorpus carries no interpretive weight in the study. The six
+counts sum to 56 correct out of 68 positives, which is the 0.824 reported
+above.
+
+Removing the first author from the adjudication does not move the headline
+figure: the weighted precision of the strict decision is 0.983 under the
+majority rule and was 0.983 under the earlier adjudication. What moves it is
+the choice of which listener to follow -- 0.969 on the 147 independent
+agreements, 0.793 on the labels of listener 2 alone. All of these are
+printed by `../eval/validation_precision.py`.
 
 ## Calibration pass (`calibration_*`, ids K001-K120)
 

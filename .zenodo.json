@@ -1,5 +1,6 @@
 {
   "title": "Kazakh Spontaneous Speech: Spontaneity Filter, Manifest and Annotations",
+  "version": "1.1.0",
   "upload_type": "dataset",
   "access_right": "open",
   "license": "cc-by-4.0",
@@ -12,11 +13,26 @@
     "code-switching",
     "KSC2"
   ],
-  "description": "Spontaneity filter, full utterance-level manifest, experimental sets and human annotation results for a study of register-controlled evaluation and parameter-efficient adaptation of Whisper on spontaneous Kazakh-Russian conversational speech. Contains no audio and no transcript text from the underlying KSC2 corpus: only utterance identifiers, feature counts, scores and our own labels.",
+  "description": "Spontaneity filter, full utterance-level manifest, experimental sets and human annotation results for a study of register-controlled evaluation and parameter-efficient adaptation of Whisper on spontaneous Kazakh-Russian conversational speech. The validation sample is labelled by three listeners, two internal and one independent, with the ground truth taken as the majority of the three. The code in filter/, eval/ and annotation_tools/ is released under the MIT licence; the data in manifest/, annotation/ and eval/results/ under CC BY 4.0. Contains no audio and no transcript text from the underlying KSC2 corpus: only utterance identifiers, feature counts, scores and our own labels.",
   "creators": [
     {
-      "name": "Yergaliyev, Askhat"
+      "name": "Yergaliyev, Askhat",
+      "affiliation": "International Information Technology University, Almaty, Kazakhstan"
     }
   ],
-  "publication_date": "2026-10-14"
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/AskhaYergali/kazakh-spontaneous-speech",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.21437/Interspeech.2022-421",
+      "relation": "isDerivedFrom",
+      "resource_type": "dataset",
+      "scheme": "doi"
+    }
+  ],
+  "publication_date": "2026-11-16"
 }
